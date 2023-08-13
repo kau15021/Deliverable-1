@@ -1,13 +1,4 @@
-/**
- * A class that represents a group of cards for a Game.
- * Add your name as an author and the date!
- * @modifier Harleen Kaur, 2023
- * @modifier Jasmine Saini, 2023
- * @modifier Priyanka Priyanka, 2023
- * @modifier Arman Sharma, 2023
- */
-
-package ca.sheridancollege.project;
+package finaldeliverable;
 
 import java.util.ArrayList;
 import java.util.Collections;

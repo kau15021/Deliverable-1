@@ -1,61 +1,44 @@
-/**
- * A class that models each Player in the game.
- * Add your name as an author and the date!
- * @modifier Harleen Kaur, 2023
- * @modifier Jasmine Saini, 2023
- * @modifier Priyanka Priyanka, 2023
- * @modifier Arman Sharma, 2023
- */
-
-package ca.sheridancollege.project;
+package finaldeliverable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Player {
 
-    private final String name;
-    private ArrayList<Card> cards;
-    private int shuffleTiming;
+    private String name;
+    private ArrayList<Card> hand;
 
     public Player(String name) {
         this.name = name;
-        this.cards = new ArrayList<>();
-    }
-    
-    public String getPlayerName() {
-        return name;
-    }
-    
-    public void setCards(ArrayList<Card> cards) {
-        addCards(cards);
-        shuffleTiming = this.cards.size();
+        hand = new ArrayList<>();
     }
 
-    public ArrayList<Card> getCardInfo() {
-        return this.cards;
+    public String getName() {
+        return name;
     }
-    
-    public Card getOneCard() {
-        if (shuffleTiming == 0) {
-            shuffle();
+
+    public ArrayList<Card> getHand() {
+        return hand;
+    }
+
+    public void addCardToHand(Card card) {
+        hand.add(card);
+    }
+
+    public void clearHand() {
+        hand.clear();
+    }
+
+    public Card getTopCard() {
+        return hand.get(hand.size() - 1);
+    }
+
+    public Card playCard() {
+        return hand.remove(hand.size() - 1);
+    }
+
+    public void collectCards(Card... cards) {
+        for (Card card : cards) {
+            addCardToHand(card);
         }
-        shuffleTiming--;
-        return this.cards.remove(0);
-    }
-    
-    public void addCards(ArrayList<Card> cards) {
-        this.cards.addAll(cards);
-    }
-    
-    public void shuffle() {
-        Collections.shuffle(this.cards);
-        shuffleTiming = this.cards.size();
-    }
-    
-    @Override
-    public String toString() {
-        String format = "%s has %d cards.";
-        return String.format(format, name, this.cards.size());
     }
 }
