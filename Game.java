@@ -17,7 +17,7 @@ public class Game {
         deck = new GroupOfCards();
         deck.shuffle();
         currentPlayerIndex = 0;
-        
+
         // Add specified number of players
         for (int i = 0; i < numPlayers; i++) {
             players.add(new Player("Player " + (i + 1)));
@@ -41,9 +41,14 @@ public class Game {
             playRound(scanner);
 
             // Check if the game should continue
-            System.out.println("\nWant to play another round? (Type 'y' for yes or 'n' for No)");
-            String play = scanner.next().toLowerCase();
-            continuePlaying = play.equals("y");
+            if (players.get(0).getHand().isEmpty() || players.get(1).getHand().isEmpty()) {
+                continuePlaying = false;
+                displayWinner();
+            } else {
+                System.out.println("\nWant to play another round? (Type 'y' for yes or 'n' for No)");
+                String play = scanner.next().toLowerCase();
+                continuePlaying = play.equals("y");
+            }
         }
 
         System.out.println("Thank you for playing!");
@@ -78,15 +83,61 @@ public class Game {
         } else {
             // It's a tie, initiate a war
             System.out.println("It's a tie! A war occurs.");
-            initiateWar();
+            initiateWar(currentPlayer, opponent, scanner);
         }
 
         // Proceed to the next round
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     }
 
-    public void initiateWar() {
-        // TODO: Implement the war logic here
-        // (This section is left blank as per your request)
+    public void initiateWar(Player currentPlayer, Player opponent, Scanner scanner) {
+    System.out.println("Initiating war...");
+
+    // Each player places three cards face down
+    Card[] currentPlayerCards = new Card[4];
+    Card[] opponentCards = new Card[4];
+
+    for (int i = 0; i < 3; i++) {
+        currentPlayerCards[i] = currentPlayer.playCard();
+        opponentCards[i] = opponent.playCard();
+    }
+
+    // Each player places one card face up
+    currentPlayerCards[3] = currentPlayer.playCard();
+    opponentCards[3] = opponent.playCard();
+
+    System.out.println(currentPlayer.getName() + "'s cards for war:");
+    for (int i = 0; i < 4; i++) {
+        System.out.println("Card " + (i + 1) + ": " + currentPlayerCards[i]);
+    }
+
+    System.out.println(opponent.getName() + "'s cards for war:");
+    for (int i = 0; i < 4; i++) {
+        System.out.println("Card " + (i + 1) + ": " + opponentCards[i]);
+    }
+
+    // Determine the winner of the war
+    if (currentPlayerCards[3].getRank().ordinal() > opponentCards[3].getRank().ordinal()) {
+        System.out.println(currentPlayer.getName() + " wins the war and collects all the cards!");
+        currentPlayer.collectCards(currentPlayerCards);
+        currentPlayer.collectCards(opponentCards);
+    } else if (currentPlayerCards[3].getRank().ordinal() < opponentCards[3].getRank().ordinal()) {
+        System.out.println(opponent.getName() + " wins the war and collects all the cards!");
+        opponent.collectCards(currentPlayerCards);
+        opponent.collectCards(opponentCards);
+    } else {
+        System.out.println("It's another tie! The war continues.");
+        initiateWar(currentPlayer, opponent, scanner); // Recursively continue the war until a winner is determined
+    }
+
+
+    }
+
+    public void displayWinner() {
+        if (players.get(0).getHand().isEmpty()) {
+            System.out.println(players.get(1).getName() + " wins the game!");
+        } else if (players.get(1).getHand().isEmpty()) {
+            System.out.println(players.get(0).getName() + " wins the game!");
+        }
     }
 }
