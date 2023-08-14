@@ -1,6 +1,7 @@
 package finaldeliverable;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Game {
@@ -10,30 +11,21 @@ public class Game {
     private GroupOfCards deck;
     private int currentPlayerIndex;
 
-    public Game(String givenName) {
+    public Game(String givenName, int numPlayers) {
         gameName = givenName;
         players = new ArrayList<>();
         deck = new GroupOfCards();
         deck.shuffle();
         currentPlayerIndex = 0;
-    }
-
-    public void addPlayer(String name) {
-        players.add(new Player(name));
-    }
-
-    public void startGame() {
-        Scanner in = new Scanner(System.in);
-        System.out.println("Welcome to the game of War!");
-
-        // Setup the game
-        System.out.println("Enter the number of players (2 in this case):");
-        int numPlayers = in.nextInt();
+        
+        // Add specified number of players
         for (int i = 0; i < numPlayers; i++) {
-            System.out.println("Enter the name of player " + (i + 1) + ":");
-            String playerName = in.next();
-            addPlayer(playerName);
+            players.add(new Player("Player " + (i + 1)));
         }
+    }
+
+    public void startGame(Scanner scanner) {
+        System.out.println("Welcome to the game of War!");
 
         // Deal cards to players
         for (Player player : players) {
@@ -46,18 +38,18 @@ public class Game {
         boolean continuePlaying = true;
         while (continuePlaying) {
             // Play a round
-            playRound();
+            playRound(scanner);
 
             // Check if the game should continue
-            System.out.println("\nWant to play another round? \nType 'y' for yes or 'n' for No!");
-            String play = in.next().toLowerCase();
+            System.out.println("\nWant to play another round? (Type 'y' for yes or 'n' for No)");
+            String play = scanner.next().toLowerCase();
             continuePlaying = play.equals("y");
         }
 
         System.out.println("Thank you for playing!");
     }
 
-    public void playRound() {
+    public void playRound(Scanner scanner) {
         Player currentPlayer = players.get(currentPlayerIndex);
 
         // Display the current player's hand and the top card of their pile
@@ -94,11 +86,7 @@ public class Game {
     }
 
     public void initiateWar() {
-        // Implement the war logic here
-    }
-
-    public static void main(String[] args) {
-        Game war = new Game("War");
-        war.startGame();
+        // TODO: Implement the war logic here
+        // (This section is left blank as per your request)
     }
 }
